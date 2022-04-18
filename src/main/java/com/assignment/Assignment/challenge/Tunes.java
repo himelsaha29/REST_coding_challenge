@@ -168,6 +168,22 @@ public class Tunes {
             result = finalResult;
         }
 
+        if(!limit.equalsIgnoreCase("-1")) {
+            int limitParameter = -1;
+            try {
+                limitParameter = Integer.valueOf(limit);
+                if(limitParameter < result.size()) {
+                    ArrayList<String> newList = new ArrayList<>();
+                    for(int i = 0; i < limitParameter; i++) {
+                        newList.add(result.get(i));
+                    }
+                    result = newList;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         System.out.println(result);
 
