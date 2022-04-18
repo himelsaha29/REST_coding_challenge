@@ -20,11 +20,15 @@ public class Tunes {
 
 
     public static void main(String[] args) {
-        get("515ef38b-0529-418f-a93a-7f2347fc5805", "", "", "");
+        try {
+            get("515ef38b-0529-418f-a93a-7f2347fc5805", "", "", "");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
-    public static List<String> get(String settingsId, String model, String offset, String limit) {
+    public static List<String> get(String settingsId, String model, String offset, String limit) throws Exception{
 
 
         Thread thread = new Thread(new Runnable() {
@@ -180,7 +184,24 @@ public class Tunes {
                     result = newList;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new Exception("Enter integer");
+            }
+        }
+
+        if(!offset.equalsIgnoreCase("-1")) {
+            int offsetParameter = -1;
+            try {
+                System.out.println("OFFSET = " + offset);
+                offsetParameter = Integer.valueOf(offset);
+                if(offsetParameter <= result.size()) {
+                    ArrayList<String> newList = new ArrayList<>();
+                    for (int i = offsetParameter; i < result.size(); i++) {
+                        newList.add(result.get(i));
+                    }
+                    result = newList;
+                }
+            } catch (Exception e) {
+                throw new Exception("Enter integer");
             }
         }
 

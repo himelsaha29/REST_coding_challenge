@@ -13,7 +13,15 @@ public class TunesController {
                                    @RequestParam(name = "model", defaultValue = "") String model,
                                    @RequestParam(name = "offset", defaultValue = "-1") String offset,
                                    @RequestParam(name = "limit", defaultValue = "-1") String limit) {
-        return Tunes.get(settingsId, model, offset, limit);
+
+        List<String> results = null;
+        try {
+            results = Tunes.get(settingsId, model, offset, limit);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return results;
     }
 
 
