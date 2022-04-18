@@ -24,7 +24,7 @@ public class Tunes {
     }
 
 
-    private static ArrayList<String> get(String settingsId, String model, String offset, String limit) {
+    public static ArrayList<String> get(String settingsId, String model, String offset, String limit) {
 
 
         Thread thread = new Thread(new Runnable() {
@@ -174,6 +174,7 @@ public class Tunes {
         return result;
 
     }
+
 
 
 
