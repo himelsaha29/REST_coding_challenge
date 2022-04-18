@@ -1,4 +1,4 @@
-# TT_coding_challenge
+# REST_coding_challenge
 
 
 The application has been dockerized. However, due to time constraint and technical difficulties, the container has not been deployed, instead the Spring boot application has been deployed for easy access to the GET endpoints.
