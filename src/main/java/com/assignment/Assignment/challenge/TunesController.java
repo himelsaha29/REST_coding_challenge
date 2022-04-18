@@ -1,18 +1,19 @@
 package com.assignment.Assignment.challenge;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class TunesController {
 
 
-    @GetMapping("/compatiblejukes/{settingsId}")
-    public ArrayList<String> getJukebox(@PathVariable("settingsId") String settingsId) {
-        return Tunes.get(settingsId, "", "", "");
+    @RequestMapping(value = "/compatiblejukes/{settingsId}")
+    public List<String> getJukebox(@PathVariable(name = "settingsId", required = true) String settingsId,
+                                   @RequestParam(name = "model", defaultValue = "") String model,
+                                   @RequestParam(name = "offset", defaultValue = "-1") String offset,
+                                   @RequestParam(name = "limit", defaultValue = "-1") String limit) {
+        return Tunes.get(settingsId, model, offset, limit);
     }
 
 
