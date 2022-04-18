@@ -3,6 +3,8 @@
 
 The application has been dockerized. However, due to time constraint and technical difficulties, the container has not been deployed, instead the Spring boot application has been deployed for easy access to the GET endpoints.
 
+<img src=https://github.com/himelsaha29/REST_coding_challenge/blob/main/img/docker_heroku.PNG>
+
 <img src=https://github.com/himelsaha29/REST_coding_challenge/blob/main/img/docker.PNG>
 
 <img src=https://github.com/himelsaha29/REST_coding_challenge/blob/main/img/localhost.PNG>
