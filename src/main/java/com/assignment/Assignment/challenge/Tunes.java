@@ -19,34 +19,23 @@ public class Tunes {
     private static HashMap<String, String> models = new HashMap<>();
 
 
-    public static void main(String[] args) {
-        try {
-            get("515ef38b-0529-418f-a93a-7f2347fc5805", "", "", "");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
     public static List<String> get(String settingsId, String model, String offset, String limit) throws Exception{
-
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                OkHttpClient.Builder settingsBuilder = new OkHttpClient.Builder();
+                settingsBuilder.connectTimeout(30, TimeUnit.SECONDS);
+                settingsBuilder.readTimeout(30, TimeUnit.SECONDS);
+                settingsBuilder.writeTimeout(30, TimeUnit.SECONDS);
+                OkHttpClient settingsClient = settingsBuilder.build();
 
-                builder.connectTimeout(30, TimeUnit.SECONDS);
-                builder.readTimeout(30, TimeUnit.SECONDS);
-                builder.writeTimeout(30, TimeUnit.SECONDS);
-                OkHttpClient client = builder.build();
+                String settingsUrl = "http://my-json-server.typicode.com/touchtunes/tech-assignment/settings";
 
-                String url = "http://my-json-server.typicode.com/touchtunes/tech-assignment/settings";
-
-                Request request = new Request.Builder()
-                        .url(url)
+                Request settingsRequest = new Request.Builder()
+                        .url(settingsUrl)
                         .build();
-                client.newCall(request).enqueue(new Callback() {
+                settingsClient.newCall(settingsRequest).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
@@ -64,9 +53,7 @@ public class Tunes {
 
                                 for(int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonReq = (JSONObject) jsonArray.get(i);
-
                                     settings.put(((jsonReq.getString("id"))), (jsonReq.getJSONArray("requires")));
-                                    System.out.println("Requires : " + jsonReq.getJSONArray("requires") + " for " + ((jsonReq.getString("id"))));
                                 }
 
 
@@ -78,12 +65,17 @@ public class Tunes {
                     }
                 });
 
-                OkHttpClient client2 = builder.build();
-                String url2 = "http://my-json-server.typicode.com/touchtunes/tech-assignment/jukes";
-                Request request2 = new Request.Builder()
-                        .url(url2)
+                OkHttpClient.Builder jukesBuilder = new OkHttpClient.Builder();
+                jukesBuilder.connectTimeout(30, TimeUnit.SECONDS);
+                jukesBuilder.readTimeout(30, TimeUnit.SECONDS);
+                jukesBuilder.writeTimeout(30, TimeUnit.SECONDS);
+                OkHttpClient jukesClient = settingsBuilder.build();
+                String jukesUrl = "http://my-json-server.typicode.com/touchtunes/tech-assignment/jukes";
+
+                Request jukesRequest = new Request.Builder()
+                        .url(jukesUrl)
                         .build();
-                client2.newCall(request2).enqueue(new Callback() {
+                jukesClient.newCall(jukesRequest).enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
@@ -99,7 +91,6 @@ public class Tunes {
                                 JSONArray jkboxes = new JSONArray(responseData);
                                 for(int i = 0; i < jkboxes.length(); i++) {
                                     JSONArray components = ((JSONObject) jkboxes.get(i)).getJSONArray("components");
-
                                     models.put(((JSONObject) jkboxes.get(i)).getString("id"), ((JSONObject) jkboxes.get(i)).getString("model"));
 
                                     if(components.length() != 0) {
@@ -112,7 +103,6 @@ public class Tunes {
                                     } else {
                                         arrayToPut = new ArrayList();
                                     }
-                                    System.out.println("JUKEBOX: " + arrayToPut + " for " + ((JSONObject) jkboxes.get(i)).getString("id") + ", model = " + ((JSONObject) jkboxes.get(i)).getString("model"));
                                     jukeboxes.put(((JSONObject) jkboxes.get(i)).getString("id"), arrayToPut);
 
                                 }
@@ -126,12 +116,11 @@ public class Tunes {
                 });
             }
         });
-        System.out.println("hello");
+
         thread.start();
 
         try {
             thread.join();
-            System.out.println("entered");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,8 +131,6 @@ public class Tunes {
         }
 
         JSONArray query = settings.get(settingsId);
-        System.out.println(query);
-
 
         ArrayList<String> result = new ArrayList<>();
 
@@ -152,7 +139,7 @@ public class Tunes {
             int match = 0;
             ArrayList arr = jukeboxes.get(e);
 
-            for (Object s : query){         // get hardwares of each jukebox
+            for (Object s : query){                  // get hardwares of each jukebox
                 if(arr.contains(s.toString())) {
                     match++;
                 }
@@ -184,6 +171,7 @@ public class Tunes {
                     result = newList;
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new Exception("Enter integer");
             }
         }
@@ -204,8 +192,6 @@ public class Tunes {
                 throw new Exception("Enter integer");
             }
         }
-
-
         System.out.println(result);
 
         return result;
